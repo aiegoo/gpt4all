@@ -8,7 +8,7 @@ import network
 import llm
 
 MyDialog {
-    id: abpoutDialog
+    id: dalleDialog
     anchors.centerIn: parent
     modal: false
     padding: 20
@@ -31,13 +31,13 @@ MyDialog {
                 anchors.left: parent.left
                 width: 60
                 height: 60
-                source: "qrc:/gpt4all/icons/logo.svg"
+                source: "qrc:/gpt4all/icons/dalle.svg"
             }
             Text {
                 anchors.left: img.right
-                anchors.leftMargin: 30
+                anchors.leftMargin: 120
                 anchors.verticalCenter: img.verticalCenter
-                text: qsTr("UCONCREATIVE")
+                text: qsTr("달리 E 테스트")
                 color: theme.textColor
                 font.pixelSize: theme.fontSizeLarge
                 font.bold: true
@@ -47,17 +47,17 @@ MyDialog {
         ScrollView {
             clip: true
             height: 200
-            width: 1024 - 40
+            width: 800 - 40
             ScrollBar.vertical.policy: ScrollBar.AlwaysOn
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
             MyTextArea {
                 id: welcome
-                width: 1024 - 40
+                width: 800 - 40
                 textFormat: TextEdit.MarkdownText
-                text: qsTr("### Release notes\n")
+                text: qsTr("테스트 ui 넣어야함.\n")
                     + Download.releaseInfo.notes
-                    + qsTr("### Contributors\n")
+                    + qsTr("나중에 추가할 예정\n")
                     + Download.releaseInfo.contributors
                 focus: false
                 readOnly: true
@@ -87,7 +87,7 @@ MyDialog {
             width: parent.width
             textFormat: Text.StyledText
             wrapMode: Text.WordWrap
-            text: qsTr("반갑습니다. <a href=\"https://home.nomic.ai\">유콘 내부 LLM 테스트용 오프소스 수정 패키지 입니다.")
+            text: qsTr("달리. <a href=\"https://home.nomic.ai\">DAll-e.")
             font.pixelSize: theme.fontSizeLarge
             onLinkActivated: { Qt.openUrlExternally("https://uconcreative.com/") }
             color: theme.textColor
@@ -103,7 +103,7 @@ MyDialog {
         id: checkForUpdatesButton
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        text: qsTr("Check for updates...")
+        text: qsTr("이미지 생성")
         font.pixelSize: theme.fontSizeLarge
         Accessible.description: qsTr("Launch an external application that will check for updates to the installer")
         onClicked: {

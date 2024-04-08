@@ -21,8 +21,6 @@ Rectangle {
 
     property var currentChat: ChatListModel.currentChat
     property var chatModel: currentChat.chatModel
-    signal settingsViewRequested(int page)
-    signal downloadViewRequested(bool showEmbeddingModels)
 
     color: theme.black
 
@@ -33,6 +31,13 @@ Rectangle {
 
     Connections {
         target: firstStartDialog
+        function onClosed() {
+            startupDialogs();
+        }
+    }
+
+    Connections {
+        target: downloadNewModels
         function onClosed() {
             startupDialogs();
         }
@@ -85,15 +90,15 @@ Rectangle {
             return;
         }
 
-        // check for any current models and if not, open download view once
+        // check for any current models and if not, open download dialog once
         if (!hasShownModelDownload && ModelList.installedModels.count === 0 && !firstStartDialog.opened) {
-            downloadViewRequested();
+            downloadNewModels.open();
             hasShownModelDownload = true;
             return;
         }
 
         // check for new version
-        if (Download.hasNewerRelease && !firstStartDialog.opened) {
+        if (Download.hasNewerRelease && !firstStartDialog.opened && !downloadNewModels.opened) {
             newVersionDialog.open();
             return;
         }
@@ -205,62 +210,43 @@ Rectangle {
 
             Text {
                 textFormat: Text.StyledText
-                text: "<a href=\"https://gpt4all.io\">gpt4all.io</a> |"
+                text: "<a href=\"https://uconcreative.com/\">유콘크리에이티브</a> "
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: theme.fontSizeFixedSmall
                 color: theme.iconBackgroundLight
                 linkColor: hoverHandler1.hovered ? theme.iconBackgroundHovered : theme.iconBackgroundLight
                 HoverHandler { id: hoverHandler1 }
-                onLinkActivated: { Qt.openUrlExternally("https://gpt4all.io") }
+                onLinkActivated: { Qt.openUrlExternally("https://uconcreative.com/") }
             }
 
-            Text {
-                textFormat: Text.StyledText
-                text: "<a href=\"https://github.com/nomic-ai/gpt4all\">github</a>"
-                horizontalAlignment: Text.AlignLeft
-                font.pixelSize: theme.fontSizeFixedSmall
-                color: theme.iconBackgroundLight
-                linkColor: hoverHandler2.hovered ? theme.iconBackgroundHovered : theme.iconBackgroundLight
-                HoverHandler { id: hoverHandler2 }
-                onLinkActivated: { Qt.openUrlExternally("https://github.com/nomic-ai/gpt4all") }
-            }
+
         }
 
         RowLayout {
             anchors.right: parent.right
             anchors.rightMargin: 30
 
-            Text {
-                textFormat: Text.StyledText
-                text: "<a href=\"https://nomic.ai\">nomic.ai</a> |"
-                horizontalAlignment: Text.AlignRight
-                font.pixelSize: theme.fontSizeFixedSmall
-                color: theme.iconBackgroundLight
-                linkColor: hoverHandler3.hovered ? theme.iconBackgroundHovered : theme.iconBackgroundLight
-                HoverHandler { id: hoverHandler3 }
-                onLinkActivated: { Qt.openUrlExternally("https://nomic.ai") }
-            }
 
             Text {
                 textFormat: Text.StyledText
-                text: "<a href=\"https://twitter.com/nomic_ai\">twitter</a> |"
+                text: "<a href=\"https://github.com/uconcreative/uconcreative.github.io\">유콘깃허브</a> |"
                 horizontalAlignment: Text.AlignRight
                 font.pixelSize: theme.fontSizeFixedSmall
                 color: theme.iconBackgroundLight
                 linkColor: hoverHandler4.hovered ? theme.iconBackgroundHovered : theme.iconBackgroundLight
                 HoverHandler { id: hoverHandler4 }
-                onLinkActivated: { Qt.openUrlExternally("https://twitter.com/nomic_ai") }
+                onLinkActivated: { Qt.openUrlExternally("https://github.com/uconcreative/uconcreative.github.io") }
             }
 
             Text {
                 textFormat: Text.StyledText
-                text: "<a href=\"https://discord.gg/4M2QFmTt2k\">discord</a>"
+                text: "<a href=\"https://discord.gg/\">discord</a>"
                 horizontalAlignment: Text.AlignRight
                 font.pixelSize: theme.fontSizeFixedSmall
                 color: theme.iconBackgroundLight
                 linkColor: hoverHandler5.hovered ? theme.iconBackgroundHovered : theme.iconBackgroundLight
                 HoverHandler { id: hoverHandler5 }
-                onLinkActivated: { Qt.openUrlExternally("https://discord.gg/4M2QFmTt2k") }
+                onLinkActivated: { Qt.openUrlExternally("https://discord.gg/") }
             }
         }
     }
@@ -291,29 +277,22 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 20
 
-            Rectangle {
+            MyToolButton {
+                id: drawerButton
                 Layout.alignment: Qt.AlignLeft
                 Layout.leftMargin: 30
-                Layout.fillWidth: true
-                Layout.preferredWidth: 100
-                Layout.topMargin: 20
-                color: "transparent"
-                Layout.preferredHeight: childrenRect.height
-                MyToolButton {
-                    id: drawerButton
-                    anchors.left: parent.left
-                    backgroundColor: theme.iconBackgroundLight
-                    width: 40
-                    height: 40
-                    scale: 1.5
-                    padding: 15
-                    source: conversation.state === "expanded" ? "qrc:/gpt4all/icons/left_panel_open.svg" : "qrc:/gpt4all/icons/left_panel_closed.svg"
-                    Accessible.role: Accessible.ButtonMenu
-                    Accessible.name: qsTr("Chat panel")
-                    Accessible.description: qsTr("Chat panel with options")
-                    onClicked: {
-                        conversation.toggleLeftPanel()
-                    }
+                backgroundColor: theme.iconBackgroundLight
+                width: 40
+                height: 40
+                scale: 1.5
+                z: 200
+                padding: 15
+                source: conversation.state === "expanded" ? "qrc:/gpt4all/icons/left_panel_open.svg" : "qrc:/gpt4all/icons/left_panel_closed.svg"
+                Accessible.role: Accessible.ButtonMenu
+                Accessible.name: qsTr("Chat panel")
+                Accessible.description: qsTr("Chat panel with options")
+                onClicked: {
+                    conversation.toggleLeftPanel()
                 }
             }
 
@@ -322,7 +301,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                Layout.preferredWidth: 100
+                Layout.minimumWidth: 375
                 Layout.maximumWidth: 675
                 enabled: !currentChat.isServer
                     && !window.trySwitchContextInProgress
@@ -394,7 +373,7 @@ Rectangle {
                         if (window.trySwitchContextInProgress)
                             return qsTr("Switching context...")
                         if (currentModelName() === "")
-                            return qsTr("Choose a model...")
+                            return qsTr("모델을 선택하세요.")
                         if (currentChat.modelLoadingPercentage === 0.0)
                             return qsTr("Reload \u00B7 ") + currentModelName()
                         if (window.isCurrentlyLoading)
@@ -480,64 +459,83 @@ Rectangle {
                 }
             }
 
-            Rectangle {
-                color: "transparent"
+            RowLayout {
                 Layout.alignment: Qt.AlignRight
                 Layout.rightMargin: 30
-                Layout.fillWidth: true
-                Layout.preferredWidth: 100
-                Layout.preferredHeight: childrenRect.height
-                Layout.topMargin: 20
+                spacing: 20
 
-                RowLayout {
-                    spacing: 20
-                    anchors.right: parent.right
-                    MyButton {
-                        id: collectionsButton
-                        Image {
-                            id: collectionsImage
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.left: parent.left
-                            anchors.leftMargin: 15
-                            width: 24
-                            height: 24
-                            mipmap: true
-                            source: "qrc:/gpt4all/icons/db.svg"
-                        }
+                MyToolButton {
+                    id: resetContextButton
+                    backgroundColor: theme.iconBackgroundLight
+                    width: 40
+                    height: 40
+                    z: 200
+                    padding: 15
+                    source: "qrc:/gpt4all/icons/regenerate.svg"
 
-                        ColorOverlay {
-                            anchors.fill: collectionsImage
-                            source: collectionsImage
-                            color: collectionsButton.hovered || collectionsImage.toggled ? theme.iconBackgroundHovered : theme.iconBackgroundLight
-                        }
+                    Accessible.name: text
+                    Accessible.description: qsTr("Reset the context and erase current conversation")
 
-                        leftPadding: 50
-                        borderWidth: 0
-                        backgroundColor: theme.mainComboBackground
-                        backgroundColorHovered: theme.conversationButtonBackgroundHovered
-                        backgroundRadius: 5
-                        padding: 15
-                        topPadding: 8
-                        bottomPadding: 8
-                        textColor: hovered || toggled ? theme.iconBackgroundHovered : theme.iconBackgroundLight
-                        text: qsTr("LocalDocs")
-                        fontPixelSize: theme.fontSizeSmall
+                    onClicked: {
+                        Network.sendResetContext(chatModel.count)
+                        currentChat.reset();
+                        currentChat.processSystemPrompt();
+                    }
+                }
 
-                        property bool toggled: currentChat.collectionList.length
-                        background: Rectangle {
-                            radius: collectionsButton.backgroundRadius
-                            color: collectionsButton.toggled ? collectionsButton.backgroundColorHovered : collectionsButton.backgroundColor
-                        }
+                MyToolButton {
+                    id: copyButton
+                    backgroundColor: theme.iconBackgroundLight
+                    width: 40
+                    height: 40
+                    z: 200
+                    padding: 15
+                    source: "qrc:/gpt4all/icons/copy.svg"
+                    Accessible.name: qsTr("Copy")
+                    Accessible.description: qsTr("Copy the conversation to the clipboard")
 
-                        Accessible.name: qsTr("Add documents")
-                        Accessible.description: qsTr("add collections of documents to the chat")
+                    TextEdit{
+                        id: copyEdit
+                        visible: false
+                    }
 
-                        onClicked: {
-                            collectionsDialog.open()
-                        }
+                    onClicked: {
+                        var conversation = getConversation()
+                        copyEdit.text = conversation
+                        copyEdit.selectAll()
+                        copyEdit.copy()
+                        copyMessage.open()
+                    }
+                }
+
+                MyToolButton {
+                    id: collectionsButton
+                    backgroundColor: theme.iconBackgroundLight
+                    width: 40
+                    height: 42.5
+                    z: 200
+                    padding: 15
+                    toggled: currentChat.collectionList.length
+                    source: "qrc:/gpt4all/icons/db.svg"
+                    Accessible.name: qsTr("Add documents")
+                    Accessible.description: qsTr("add collections of documents to the chat")
+
+                    onClicked: {
+                        collectionsDialog.open()
                     }
                 }
             }
+        }
+    }
+
+    SettingsDialog {
+        id: settingsDialog
+        anchors.centerIn: parent
+        width: Math.min(1920, window.width - (window.width * .1))
+        height: window.height - (window.height * .1)
+        onDownloadClicked: {
+            downloadNewModels.showEmbeddingModels = true
+            downloadNewModels.open()
         }
     }
 
@@ -552,7 +550,8 @@ Rectangle {
         id: collectionsDialog
         anchors.centerIn: parent
         onAddRemoveClicked: {
-            settingsViewRequested(2 /*page 2*/)
+            settingsDialog.pageToDisplay = 2;
+            settingsDialog.open();
         }
     }
 
@@ -662,6 +661,18 @@ Rectangle {
         }
     }
 
+    ModelDownloaderDialog {
+        id: downloadNewModels
+        anchors.centerIn: parent
+        width: Math.min(1920, window.width - (window.width * .1))
+        height: window.height - (window.height * .1)
+        Item {
+            Accessible.role: Accessible.Dialog
+            Accessible.name: qsTr("Download new models")
+            Accessible.description: qsTr("Dialog for downloading new models")
+        }
+    }
+
     ChatDrawer {
         id: drawer
         anchors.left: parent.left
@@ -744,7 +755,7 @@ Rectangle {
 
                         Text {
                             Layout.alignment: Qt.AlignHCenter
-                            text: qsTr("GPT4All")
+                            text: qsTr("유콘크리에이티브")
                             color: theme.titleTextColor
                             font.pixelSize: theme.fontSizeLargest + 15
                             font.bold: true
@@ -757,11 +768,10 @@ Rectangle {
                             textFormat: Text.StyledText
                             text: qsTr(
                             "<ul>
-                            <li>Run privacy-aware local chatbots.
-                            <li>No internet required to use.
-                            <li>CPU and GPU acceleration.
-                            <li>Chat with your local data and documents.
-                            <li>Built by Nomic AI and forever open-source.
+                            <li>유콘 내부 LLM 테스트용.
+                            <li>사용하는 데 인터넷이 필요하지 않습니다.
+                            <li>CPU 및 GPU 가속 선택가능.
+                            <li>Nomic AI오픈 소스룰 수정함.
                             </ul>
                             ")
                             color: theme.textColor
@@ -811,31 +821,6 @@ Rectangle {
                             }
                         }
 
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter
-                            textFormat: Text.StyledText
-                            text: qsTr(
-                            "<p></p><a href=\"https://docs.gpt4all.io/gpt4all_chat.html\">Documentation
-                            ")
-                            onLinkActivated: { Qt.openUrlExternally("https://docs.gpt4all.io/gpt4all_chat.html") }
-                            color: theme.textColor
-                            linkColor: theme.linkColor
-                            font.pixelSize: theme.fontSizeLarge
-                            wrapMode: Text.WordWrap
-                        }
-
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter
-                            textFormat: Text.StyledText
-                            text: qsTr(
-                            "<a href=\"https://docs.gpt4all.io/gpt4all_faq.html\">Frequently Asked Questions
-                            ")
-                            onLinkActivated: { Qt.openUrlExternally("https://docs.gpt4all.io/gpt4all_faq.html") }
-                            color: theme.textColor
-                            linkColor: theme.linkColor
-                            font.pixelSize: theme.fontSizeLarge
-                            wrapMode: Text.WordWrap
-                        }
 
                         MyButton {
                             id: downloadButton
@@ -847,7 +832,7 @@ Rectangle {
                             padding: 18
                             leftPadding: 50
                             Image {
-                                id: downloadImage
+                                id: image
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 anchors.leftMargin: 15
@@ -857,13 +842,12 @@ Rectangle {
                                 source: "qrc:/gpt4all/icons/download.svg"
                             }
                             ColorOverlay {
-                                anchors.fill: downloadImage
-                                source: downloadImage
+                                anchors.fill: image
+                                source: image
                                 color: theme.accentColor
                             }
                             onClicked: {
-                                console.log("download button")
-                                downloadViewRequested(false /*showEmbeddingModels*/);
+                                downloadNewModels.open();
                             }
                         }
                     }
@@ -1137,7 +1121,7 @@ Rectangle {
                     sourceSize.height: 1024
                     fillMode: Image.PreserveAspectFit
                     opacity: 0.15
-                    source: "qrc:/gpt4all/icons/network.svg"
+                    source: "qrc:/gpt4all/icons/logo.svg"
                 }
             }
         }

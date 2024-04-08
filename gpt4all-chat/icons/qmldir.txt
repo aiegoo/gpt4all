@@ -1,0 +1,37 @@
+module gpt4all
+typeinfo chat.qmltypes
+prefer :/gpt4all/
+ChatDrawer 1.0 qml/ChatDrawer.qml
+ChatView 1.0 qml/ChatView.qml
+CollectionsDialog 1.0 qml/CollectionsDialog.qml
+ModelDownloaderDialog 1.0 qml/ModelDownloaderDialog.qml
+NetworkDialog 1.0 qml/NetworkDialog.qml
+NewVersionDialog 1.0 qml/NewVersionDialog.qml
+ThumbsDownDialog 1.0 qml/ThumbsDownDialog.qml
+SettingsDialog 1.0 qml/SettingsDialog.qml
+StartupDialog 1.0 qml/StartupDialog.qml
+PopupDialog 1.0 qml/PopupDialog.qml
+AboutDialog 1.0 qml/AboutDialog.qml
+Theme 1.0 qml/Theme.qml
+ModelSettings 1.0 qml/ModelSettings.qml
+ApplicationSettings 1.0 qml/ApplicationSettings.qml
+LocalDocsSettings 1.0 qml/LocalDocsSettings.qml
+SwitchModelDialog 1.0 qml/SwitchModelDialog.qml
+MySettingsTab 1.0 qml/MySettingsTab.qml
+MySettingsStack 1.0 qml/MySettingsStack.qml
+MySettingsDestructiveButton 1.0 qml/MySettingsDestructiveButton.qml
+MySettingsButton 1.0 qml/MySettingsButton.qml
+MySettingsLabel 1.0 qml/MySettingsLabel.qml
+MySlug 1.0 qml/MySlug.qml
+MyButton 1.0 qml/MyButton.qml
+MyComboBox 1.0 qml/MyComboBox.qml
+MyDialog 1.0 qml/MyDialog.qml
+MyDirectoryField 1.0 qml/MyDirectoryField.qml
+MyTextArea 1.0 qml/MyTextArea.qml
+MyTextField 1.0 qml/MyTextField.qml
+MyCheckBox 1.0 qml/MyCheckBox.qml
+MyBusyIndicator 1.0 qml/MyBusyIndicator.qml
+MyMiniButton 1.0 qml/MyMiniButton.qml
+MyToolButton 1.0 qml/MyToolButton.qml
+DalleDialog 1.0 qml/DalleDialog.qml
+

@@ -36,7 +36,7 @@ MyDialog {
                 anchors.left: img.right
                 anchors.leftMargin: 30
                 anchors.verticalCenter: img.verticalCenter
-                text: qsTr("Contribute data to the GPT4All Opensource Datalake.")
+                text: qsTr("GPT4All Opensource 기반으로 유콘크리에이티브 테스트용 제작")
                 color: theme.textColor
                 font.pixelSize: theme.fontSizeLarge
             }
@@ -52,11 +52,11 @@ MyDialog {
             MyTextArea {
                 id: textOptIn
                 width: 1024 - 40
-                text: qsTr("By enabling this feature, you will be able to participate in the democratic process of training a large language model by contributing data for future model improvements.
+                text: qsTr("이 기능을 활성화하면 향후 모델 개선을 위한 데이터를 제공하여 대규모 언어 모델을 훈련하는 민주적 프로세스에 참여할 수 있습니다.
 
-When a GPT4All model responds to you and you have opted-in, your conversation will be sent to the GPT4All Open Source Datalake. Additionally, you can like/dislike its response. If you dislike a response, you can suggest an alternative response. This data will be collected and aggregated in the GPT4All Datalake.
+GPT4All 모델이 귀하에게 응답하고 귀하가 동의하면 대화가 GPT4All 오픈 소스 데이터레이크로 전송됩니다. 또한 응답에 좋아요/싫어요를 설정할 수 있습니다. 답변이 마음에 들지 않으면 대체 답변을 제안할 수 있습니다. 이 데이터는 GPT4All Datalake에서 수집되고 집계됩니다.
 
-NOTE: By turning on this feature, you will be sending your data to the GPT4All Open Source Datalake. You should have no expectation of chat privacy when this feature is enabled. You should; however, have an expectation of an optional attribution if you wish. Your chat data will be openly available for anyone to download and will be used by Nomic AI to improve future GPT4All models. Nomic AI will retain all attribution information attached to your data and you will be credited as a contributor to any GPT4All model release that uses your data!")
+참고: 이 기능을 켜면 데이터가 GPT4All 오픈 소스 데이터레이크로 전송됩니다. 이 기능을 활성화하면 채팅 개인 정보 보호를 기대할 수 없습니다. 당신은해야합니다; 그러나 원하는 경우 선택적 귀속을 기대할 수 있습니다. 귀하의 채팅 데이터는 누구나 다운로드할 수 있도록 공개적으로 제공되며 Nomic AI가 향후 GPT4All 모델을 개선하는 데 사용될 것입니다. Nomic AI는 귀하의 데이터에 첨부된 모든 속성 정보를 유지하며 귀하는 귀하의 데이터를 사용하는 모든 GPT4All 모델 릴리스에 기여자로 인정됩니다!")
                 focus: false
                 readOnly: true
                 Accessible.role: Accessible.Paragraph

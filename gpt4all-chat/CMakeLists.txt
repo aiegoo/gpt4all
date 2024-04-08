@@ -100,6 +100,7 @@ qt_add_qml_module(chat
     NO_CACHEGEN
     QML_FILES
       main.qml
+      qml/DalleDialog.qml
       qml/ChatDrawer.qml
       qml/ChatView.qml
       qml/CollectionsDialog.qml
@@ -133,6 +134,7 @@ qt_add_qml_module(chat
       qml/MyMiniButton.qml
       qml/MyToolButton.qml
     RESOURCES
+      icons/dalle.svg
       icons/send_message.svg
       icons/stop_generating.svg
       icons/regenerate.svg
